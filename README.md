@@ -1,5 +1,15 @@
 # Java Web App Deployment with AWS CI/CD
-Welcom to this project combining Java web app development and AWS CI/CD tools
+Welcome to this project combining Java web app development and AWS CI/CD tools
+
+The deployment pipeline I'm building around the Java web app in this repository is invisible to the end-user, but makes a big impact by automating the software release processes.
+
+## Technologies
+
+ - **Amazon EC2**
+ - **AWS CodeArtifact**
+ - **AWS CodeBuild**
+ - **AWS CodeArtifact**
+ - **AWS CodePiepline**
 
 
 ## Setup
