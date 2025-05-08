@@ -8,7 +8,7 @@ The deployment pipeline I'm building around the Java web app in this repository 
  - **Amazon EC2**
  - **AWS CodeArtifact**
  - **AWS CodeBuild**
- - **AWS CodeArtifact**
+ - **AWS CodeDeploy**
  - **AWS CodePiepline**
 
 

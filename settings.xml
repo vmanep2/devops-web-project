@@ -1,0 +1,35 @@
+<settings>
+
+    <servers>
+    <server>
+        <id>vinayakdevops-devops-cicd</id>
+        <username>aws</username>
+        <password>${env.CODEARTIFACT_AUTH_TOKEN}</password>
+    </server>
+    </servers>
+
+    <profiles>
+    <profile>
+        <id>vinayakdevops-devops-cicd</id>
+        <activation>
+        <activeByDefault>true</activeByDefault>
+        </activation>
+        <repositories>
+        <repository>
+            <id>vinayakdevops-devops-cicd</id>
+            <url>https://vinayakdevops-030202421953.d.codeartifact.us-east-2.amazonaws.com/maven/devops-cicd/</url>
+        </repository>
+        </repositories>
+    </profile>
+    </profiles>
+
+    <mirrors>
+    <mirror>
+        <id>vinayakdevops-devops-cicd</id>
+        <name>vinayakdevops-devops-cicd</name>
+        <url>https://vinayakdevops-030202421953.d.codeartifact.us-east-2.amazonaws.com/maven/devops-cicd/</url>
+        <mirrorOf>*</mirrorOf>
+    </mirror>
+    </mirrors>
+
+</settings>
