@@ -17,7 +17,16 @@
         }
 
         h1 {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+        }
+
+        #score {
+            margin: 10px 0;
+            font-size: 24px;
+        }
+
+        #controls {
+            margin-bottom: 10px;
         }
 
         #game {
@@ -51,15 +60,23 @@
             border-radius: 50%;
         }
 
-        #score {
-            margin: 15px 0;
-            font-size: 24px;
+        button {
+            margin: 0 5px;
+            padding: 6px 12px;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
     <h1>Hello Nak</h1>
     <div id="score">0 : 0</div>
+
+    <div id="controls">
+        <button onclick="startGame()">Start</button>
+        <button onclick="pauseGame()">Pause</button>
+        <button onclick="resetGame()">Play Again</button>
+    </div>
+
     <div id="game">
         <div id="paddleLeft" class="paddle"></div>
         <div id="paddleRight" class="paddle"></div>
@@ -76,25 +93,23 @@
         const gameWidth = 600;
         const gameHeight = 400;
         const paddleSpeed = 6;
-        const ballSpeed = 4;
+        const baseBallSpeed = 4;
 
-        let ballX = gameWidth / 2 - 7;
-        let ballY = gameHeight / 2 - 7;
-        let ballDX = ballSpeed;
-        let ballDY = ballSpeed;
-
-        let paddleLeftY = gameHeight / 2 - 40;
-        let paddleRightY = gameHeight / 2 - 40;
-
+        let ballX, ballY, ballDX, ballDY;
+        let paddleLeftY, paddleRightY;
         let keys = {};
-
         let scoreLeft = 0;
         let scoreRight = 0;
+        let isRunning = false;
+        let animationFrame;
+        let waiting = false;
 
         document.addEventListener("keydown", e => keys[e.key] = true);
         document.addEventListener("keyup", e => keys[e.key] = false);
 
         function update() {
+            if (!isRunning || waiting) return;
+
             // Move paddles
             if (keys["w"] && paddleLeftY > 0) paddleLeftY -= paddleSpeed;
             if (keys["s"] && paddleLeftY < gameHeight - 80) paddleLeftY += paddleSpeed;
@@ -111,7 +126,7 @@
             // Bounce off top/bottom
             if (ballY <= 0 || ballY >= gameHeight - 15) ballDY *= -1;
 
-            // Paddle collision
+            // Paddle collisions
             if (ballX <= 10 && ballY + 15 > paddleLeftY && ballY < paddleLeftY + 80) {
                 ballDX *= -1;
                 ballX = 10;
@@ -124,29 +139,65 @@
             // Scoring
             if (ballX < 0) {
                 scoreRight++;
-                resetBall();
+                scoreDisplay.textContent = `${scoreLeft} : ${scoreRight}`;
+                delayedResetBall();
             }
             if (ballX > gameWidth - 15) {
                 scoreLeft++;
-                resetBall();
+                scoreDisplay.textContent = `${scoreLeft} : ${scoreRight}`;
+                delayedResetBall();
             }
-
-            scoreDisplay.textContent = `${scoreLeft} : ${scoreRight}`;
 
             ball.style.left = ballX + "px";
             ball.style.top = ballY + "px";
 
-            requestAnimationFrame(update);
+            animationFrame = requestAnimationFrame(update);
         }
 
-        function resetBall() {
+        function resetPositions() {
+            paddleLeftY = gameHeight / 2 - 40;
+            paddleRightY = gameHeight / 2 - 40;
+            paddleLeft.style.top = paddleLeftY + "px";
+            paddleRight.style.top = paddleRightY + "px";
+
             ballX = gameWidth / 2 - 7;
             ballY = gameHeight / 2 - 7;
-            ballDX *= -1;
-            ballDY = (Math.random() > 0.5 ? 1 : -1) * ballSpeed;
+            ball.style.left = ballX + "px";
+            ball.style.top = ballY + "px";
         }
 
-        update();
+        function delayedResetBall() {
+            isRunning = false;
+            waiting = true;
+            resetPositions();
+            setTimeout(() => {
+                ballDX = (Math.random() > 0.5 ? 1 : -1) * baseBallSpeed;
+                ballDY = (Math.random() > 0.5 ? 1 : -1) * baseBallSpeed;
+                isRunning = true;
+                waiting = false;
+                update();
+            }, 2000);
+        }
+
+        function startGame() {
+            if (isRunning) return;
+            resetPositions();
+            delayedResetBall();
+        }
+
+        function pauseGame() {
+            isRunning = false;
+            cancelAnimationFrame(animationFrame);
+        }
+
+        function resetGame() {
+            pauseGame();
+            scoreLeft = 0;
+            scoreRight = 0;
+            scoreDisplay.textContent = "0 : 0";
+            resetPositions();
+            startGame();
+        }
     </script>
 </body>
 </html>
