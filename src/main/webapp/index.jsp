@@ -68,7 +68,7 @@
     </style>
 </head>
 <body>
-    <h1>Hello Ashwin</h1>
+    <h1>JSVOSR Vinayak</h1>
     <div id="score">0 : 0</div>
 
     <div id="controls">
